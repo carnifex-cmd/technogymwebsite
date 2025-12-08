@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,8 +14,24 @@ const navItems = [
 ];
 
 export function Navbar() {
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 w-full">
+        <nav
+            className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${isScrolled
+                    ? "bg-white/80 shadow-sm backdrop-blur-md"
+                    : "bg-transparent"
+                }`}
+        >
             <div className="flex items-center justify-between px-8 py-6 lg:px-12">
                 {/* Left: Logo */}
                 <Link href="/" className="flex items-center gap-2">
@@ -43,7 +60,10 @@ export function Navbar() {
                         <Link
                             key={item.label}
                             href={item.href}
-                            className="text-sm font-medium tracking-wide text-white transition-colors hover:text-white/80"
+                            className={`text-sm font-medium tracking-wide transition-colors ${isScrolled
+                                    ? "text-black hover:text-black/60"
+                                    : "text-white hover:text-white/80"
+                                }`}
                         >
                             {item.label}
                         </Link>
@@ -54,7 +74,10 @@ export function Navbar() {
                 <div className="flex items-center gap-4">
                     {/* Search Icon */}
                     <button
-                        className="rounded-full p-2 text-white transition-colors hover:bg-white/10"
+                        className={`rounded-full p-2 transition-colors ${isScrolled
+                                ? "text-black hover:bg-black/10"
+                                : "text-white hover:bg-white/10"
+                            }`}
                         aria-label="Search"
                     >
                         <Search className="h-5 w-5" />
@@ -62,7 +85,10 @@ export function Navbar() {
 
                     {/* Cart Icon */}
                     <button
-                        className="rounded-full p-2 text-white transition-colors hover:bg-white/10"
+                        className={`rounded-full p-2 transition-colors ${isScrolled
+                                ? "text-black hover:bg-black/10"
+                                : "text-white hover:bg-white/10"
+                            }`}
                         aria-label="Cart"
                     >
                         <ShoppingCart className="h-5 w-5" />
@@ -71,7 +97,10 @@ export function Navbar() {
                     {/* Contact Us Button */}
                     <Button
                         variant="outline"
-                        className="rounded-full border-white bg-transparent px-6 py-2 text-sm font-medium tracking-wide text-white transition-all hover:bg-white hover:text-black"
+                        className={`rounded-full px-6 py-2 text-sm font-medium tracking-wide transition-all ${isScrolled
+                                ? "border-black bg-transparent text-black hover:bg-black hover:text-white"
+                                : "border-white bg-transparent text-white hover:bg-white hover:text-black"
+                            }`}
                     >
                         CONTACT US
                     </Button>
