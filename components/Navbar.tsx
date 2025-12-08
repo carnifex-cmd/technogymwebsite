@@ -6,9 +6,9 @@ import { Search, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
+    { label: "HOME", href: "/" },
     { label: "WELLNESS", href: "/wellness" },
     { label: "PRODUCTS", href: "/products" },
-    { label: "DESIGN", href: "/design" },
     { label: "STORIES", href: "/stories" },
     { label: "MEMBERSHIP", href: "/membership" },
 ];
@@ -28,8 +28,8 @@ export function Navbar() {
     return (
         <nav
             className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${isScrolled
-                    ? "bg-white/80 shadow-sm backdrop-blur-md"
-                    : "bg-transparent"
+                ? "bg-white/80 shadow-sm backdrop-blur-md"
+                : "bg-transparent"
                 }`}
         >
             <div className="flex items-center justify-between px-8 py-6 lg:px-12">
@@ -61,8 +61,8 @@ export function Navbar() {
                             key={item.label}
                             href={item.href}
                             className={`text-sm font-medium tracking-wide transition-colors ${isScrolled
-                                    ? "text-black hover:text-black/60"
-                                    : "text-white hover:text-white/80"
+                                ? "text-black hover:text-black/60"
+                                : "text-white hover:text-white/80"
                                 }`}
                         >
                             {item.label}
@@ -75,8 +75,8 @@ export function Navbar() {
                     {/* Search Icon */}
                     <button
                         className={`rounded-full p-2 transition-colors ${isScrolled
-                                ? "text-black hover:bg-black/10"
-                                : "text-white hover:bg-white/10"
+                            ? "text-black hover:bg-black/10"
+                            : "text-white hover:bg-white/10"
                             }`}
                         aria-label="Search"
                     >
@@ -86,8 +86,8 @@ export function Navbar() {
                     {/* Cart Icon */}
                     <button
                         className={`rounded-full p-2 transition-colors ${isScrolled
-                                ? "text-black hover:bg-black/10"
-                                : "text-white hover:bg-white/10"
+                            ? "text-black hover:bg-black/10"
+                            : "text-white hover:bg-white/10"
                             }`}
                         aria-label="Cart"
                     >
@@ -98,8 +98,8 @@ export function Navbar() {
                     <Button
                         variant="outline"
                         className={`rounded-full px-6 py-2 text-sm font-medium tracking-wide transition-all ${isScrolled
-                                ? "border-black bg-transparent text-black hover:bg-black hover:text-white"
-                                : "border-white bg-transparent text-white hover:bg-white hover:text-black"
+                            ? "border-black bg-transparent text-black hover:bg-black hover:text-white"
+                            : "border-white bg-transparent text-white hover:bg-white hover:text-black"
                             }`}
                     >
                         CONTACT US
