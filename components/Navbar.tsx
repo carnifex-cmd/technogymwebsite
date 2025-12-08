@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ShoppingCart } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -15,6 +16,7 @@ const navItems = [
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -56,18 +58,23 @@ export function Navbar() {
 
                 {/* Center: Navigation Links */}
                 <div className="hidden items-center gap-8 lg:flex">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.label}
-                            href={item.href}
-                            className={`text-sm font-medium tracking-wide transition-colors ${isScrolled
-                                ? "text-black hover:text-black/60"
-                                : "text-white hover:text-white/80"
-                                }`}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.href;
+                        return (
+                            <Link
+                                key={item.label}
+                                href={item.href}
+                                className={`relative text-sm font-medium tracking-wide transition-all ${isActive
+                                    ? `${isScrolled ? "text-black" : "text-white"} after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-yellow-400`
+                                    : isScrolled
+                                        ? "text-black opacity-70 hover:opacity-100"
+                                        : "text-white hover:opacity-80"
+                                    }`}
+                            >
+                                {item.label}
+                            </Link>
+                        );
+                    })}
                 </div>
 
                 {/* Right: Icons and CTA Button */}
@@ -81,17 +88,6 @@ export function Navbar() {
                         aria-label="Search"
                     >
                         <Search className="h-5 w-5" />
-                    </button>
-
-                    {/* Cart Icon */}
-                    <button
-                        className={`rounded-full p-2 transition-colors ${isScrolled
-                            ? "text-black hover:bg-black/10"
-                            : "text-white hover:bg-white/10"
-                            }`}
-                        aria-label="Cart"
-                    >
-                        <ShoppingCart className="h-5 w-5" />
                     </button>
 
                     {/* Contact Us Button */}
