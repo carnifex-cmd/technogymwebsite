@@ -39,7 +39,7 @@ export function Hero({
         if (isTransitioning) return;
         setIsTransitioning(true);
         setCurrentSlide(index);
-        setTimeout(() => setIsTransitioning(false), 500);
+        setTimeout(() => setIsTransitioning(false), 1000);
     }, [isTransitioning]);
 
     const handleNext = useCallback(() => {
@@ -66,16 +66,23 @@ export function Hero({
     const currentData = slides[currentSlide];
 
     return (
-        <section
-            className="relative flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat transition-all duration-500 ease-in-out"
-            style={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${currentData.backgroundImage}')`,
-            }}
-        >
-            <div
-                className={`container flex flex-col items-center justify-center gap-8 px-4 text-center transition-all duration-500 ease-in-out ${isTransitioning ? "opacity-0 scale-95" : "opacity-100 scale-100"
-                    }`}
-            >
+        <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+            {/* Background images - stacked for crossfade effect */}
+            {slides.map((slide, index) => (
+                <div
+                    key={index}
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{
+                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${slide.backgroundImage}')`,
+                        opacity: index === currentSlide ? 1 : 0,
+                        transition: 'opacity 1s ease-in-out',
+                        zIndex: index === currentSlide ? 1 : 0,
+                    }}
+                />
+            ))}
+
+            {/* Content overlay */}
+            <div className="relative z-10 container flex flex-col items-center justify-center gap-8 px-4 text-center">
                 <h1 className="text-5xl font-bold uppercase tracking-tight text-white md:text-6xl lg:text-7xl">
                     {currentData.title}
                 </h1>
@@ -102,7 +109,7 @@ export function Hero({
             </div>
 
             {/* Scroll indicator */}
-            <div className="absolute bottom-8 right-8 flex items-center gap-2 text-sm text-white/60">
+            <div className="absolute bottom-8 right-8 z-10 flex items-center gap-2 text-sm text-white/60">
                 <span className="writing-mode-vertical rotate-180" style={{ writingMode: "vertical-rl" }}>
                     Scroll
                 </span>
@@ -110,7 +117,7 @@ export function Hero({
 
             {/* Slider controls - only show if more than 1 slide */}
             {slideCount > 1 && (
-                <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-3">
+                <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
                     <button
                         onClick={handlePrev}
                         className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 text-white/60 transition-colors hover:border-white hover:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
@@ -126,7 +133,7 @@ export function Hero({
                                 key={index}
                                 onClick={() => goToSlide(index)}
                                 aria-label={`Go to slide ${index + 1}`}
-                                className={`h-0.5 w-8 rounded-full transition-colors ${index === currentSlide ? "bg-yellow-400" : "bg-white/30 hover:bg-white/50"
+                                className={`h-0.5 w-8 rounded-full transition-all duration-300 ${index === currentSlide ? "bg-yellow-400 w-12" : "bg-white/30 hover:bg-white/50"
                                     }`}
                             />
                         ))}
