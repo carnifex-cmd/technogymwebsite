@@ -7,7 +7,7 @@ interface PageContainerProps {
 
 export function PageContainer({ children, className = "" }: PageContainerProps) {
     return (
-        <div className={`mx-auto w-full max-w-[1800px] overflow-hidden rounded-3xl ${className}`}>
+        <div className={`w-full overflow-hidden ${className}`}>
             {children}
         </div>
     );
