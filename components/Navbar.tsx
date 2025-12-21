@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { SearchModal } from "@/components/SearchModal";
 import { ContactModal } from "@/components/ContactModal";
 
@@ -20,6 +21,7 @@ export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isContactOpen, setIsContactOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -49,13 +51,13 @@ export function Navbar() {
                                 viewBox="0 0 32 32"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="text-yellow-400"
+                                className={`transition-colors duration-300 ${isScrolled ? "text-amber-700" : "text-yellow-400"}`}
                             >
                                 <rect x="6" y="8" width="4" height="16" fill="currentColor" />
                                 <rect x="14" y="4" width="4" height="24" fill="currentColor" />
                                 <rect x="22" y="8" width="4" height="16" fill="currentColor" />
                             </svg>
-                            <span className="text-[8px] font-bold tracking-[0.2em] text-yellow-400">
+                            <span className={`text-[8px] font-bold tracking-[0.2em] transition-colors duration-300 ${isScrolled ? "text-amber-700" : "text-yellow-400"}`}>
                                 TECHNOGYM
                             </span>
                         </div>
@@ -96,17 +98,29 @@ export function Navbar() {
                             <Search className="h-5 w-5" />
                         </button>
 
-                        {/* Contact Us Button */}
+                        {/* Contact Us Button - Hidden on mobile */}
                         <Button
                             variant="outline"
                             onClick={() => setIsContactOpen(true)}
-                            className={`rounded-full px-6 py-2 text-sm font-medium tracking-wide transition-all ${isScrolled
+                            className={`hidden lg:block rounded-full px-6 py-2 text-sm font-medium tracking-wide transition-all ${isScrolled
                                 ? "border-black bg-transparent text-black hover:bg-black hover:text-white"
                                 : "border-white bg-transparent text-white hover:bg-white hover:text-black"
                                 }`}
                         >
                             CONTACT US
                         </Button>
+
+                        {/* Hamburger Menu - Visible on mobile only */}
+                        <button
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className={`lg:hidden rounded-full p-2 transition-colors ${isScrolled
+                                ? "text-black hover:bg-black/10"
+                                : "text-white hover:bg-white/10"
+                                }`}
+                            aria-label="Open menu"
+                        >
+                            <Menu className="h-6 w-6" />
+                        </button>
                     </div>
                 </div>
             </nav>
@@ -116,6 +130,60 @@ export function Navbar() {
 
             {/* Contact Modal */}
             <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+
+            {/* Mobile Menu Sheet */}
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                <SheetContent side="right" className="w-[300px] bg-white">
+                    <SheetHeader className="border-b pb-4">
+                        <SheetTitle className="flex items-center gap-2">
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="text-amber-700"
+                            >
+                                <rect x="6" y="8" width="4" height="16" fill="currentColor" />
+                                <rect x="14" y="4" width="4" height="24" fill="currentColor" />
+                                <rect x="22" y="8" width="4" height="16" fill="currentColor" />
+                            </svg>
+                            <span className="text-xs font-bold tracking-[0.2em] text-amber-700">
+                                TECHNOGYM
+                            </span>
+                        </SheetTitle>
+                    </SheetHeader>
+                    <nav className="flex flex-col gap-1 py-6">
+                        {navItems.map((item) => {
+                            const isActive = pathname === item.href;
+                            return (
+                                <Link
+                                    key={item.label}
+                                    href={item.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={`px-4 py-3 text-sm font-medium tracking-wide transition-all rounded-lg ${isActive
+                                            ? "bg-yellow-50 text-amber-700 border-l-4 border-amber-700"
+                                            : "text-gray-700 hover:bg-gray-100 hover:text-black"
+                                        }`}
+                                >
+                                    {item.label}
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                    <div className="border-t pt-6 px-4">
+                        <Button
+                            onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                setIsContactOpen(true);
+                            }}
+                            className="w-full rounded-full bg-amber-700 text-white hover:bg-amber-800"
+                        >
+                            CONTACT US
+                        </Button>
+                    </div>
+                </SheetContent>
+            </Sheet>
         </>
     );
 }
